@@ -1,19 +1,24 @@
-const BASEURL = 'https://equalexperts.github.io/'
+import { PriceResponse } from "../response/PriceResponse";
 
-const getPrice = async <T>(productName: string): Promise<T> => {
-    const url = BASEURL + `backend-take-home-test-data/${productName}.json`;
-    try {
-        return await fetch(url)
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(res.statusText)
-                }
-                return res.json();
-            })
-    } catch (e) {
-        // @ts-ignore
-        throw new Error(e.message.toString())
-    }
-}
+const BASEURL = "https://equalexperts.github.io/";
 
-export const PriceService = {getPrice}
+const getPrice = async (
+  productName: string,
+): Promise<PriceResponse | Error> => {
+  const url = BASEURL + `backend-take-home-test-data/${productName}.json`;
+  let error = new Error("Something went wrong");
+  let response;
+  try {
+    await fetch(url).then((res) => {
+      if (!res.ok) {
+        error = new Error(res.statusText);
+      }
+      response = res.json() as unknown as PriceResponse;
+    });
+  } catch (e) {
+    console.log(error.message);
+  }
+  return response || error;
+};
+
+export const PriceService = { getPrice };

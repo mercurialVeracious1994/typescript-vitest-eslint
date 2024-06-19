@@ -1,4 +1,4 @@
 export interface PriceResponse {
-    title: string
-    price: number
+  title: string;
+  price: number;
 }
